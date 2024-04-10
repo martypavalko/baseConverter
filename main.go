@@ -50,12 +50,13 @@ func hexValidate (hexValue string) bool {
    return true 
 }
 
-func decToHex (decValue float64) string {
+func decToHex (decValue int) string {
+    var floatDecValue = float64(decValue)
     var hexValue float64
     var sb strings.Builder
-    log.Printf("decValue / 16 = %f\n", decValue/16)
-    for math.Floor(math.Mod(decValue, 16)) > 0 {
-        hexValue = math.Floor(math.Mod(decValue, 16))
+    log.Printf("decValue / 16 = %f\n", floatDecValue/16)
+    for math.Floor(math.Mod(floatDecValue, 16)) > 0 {
+        hexValue = math.Floor(math.Mod(floatDecValue, 16))
         log.Printf("Floored hexvalue = %f", hexValue)
         switch hexValue {
         case 10:
@@ -80,6 +81,30 @@ func decToHex (decValue float64) string {
         hexOutput = string(v) + hexOutput
     }
     return hexOutput
+}
+
+func userPrompt() {
+    var answer string
+    fmt.Println("Please select a mode:")
+    fmt.Println("[1] Convert hexadecimal value to decimal")
+    fmt.Println("[2] Convert decimal value to hexadecimal")
+    for {
+        fmt.Scanln(&answer)
+        if answer == "1" {
+            var hexValue string
+            fmt.Println()
+            hexToDec(hexValue)
+            break
+        } else if answer == "2" {
+            var decValue string
+            decToHex(decValue)
+            break
+        } else {
+            log.Fatalln("Invalid Input! Try Again!")
+        }
+    }
+    
+    
 }
 
 func main() {
