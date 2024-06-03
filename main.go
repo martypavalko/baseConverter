@@ -12,7 +12,7 @@ func getInputBase(input string) string {
     // Hex input: bf43
     // Dec input: 34765
 
-    conv, err := strconv.Atoi(input)
+    _, err := strconv.Atoi(input)
     if err != nil {
         // Must be bin or dec
         pattern, _ := regexp.Compile("[0-1]*")
@@ -25,6 +25,18 @@ func getInputBase(input string) string {
     return "AOK"
 } 
 
+func inputTester() {
+    test1 := getInputBase("10001")
+    test2 := getInputBase("1234")
+    test3 := getInputBase("b34f")
+
+    fmt.Printf("Bin: %s\n",test1)
+    fmt.Printf("Dec: %s\n",test2)
+    fmt.Printf("Hex: %s\n",test3)
+
+}
+
 func main() {
     fmt.Println("Base conversion")
+    inputTester()
 }
