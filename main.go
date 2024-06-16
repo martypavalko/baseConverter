@@ -30,7 +30,7 @@ func validateInput(userInput, conversionType string) (bool, error){
     var invalid bool = false
     var err error
     if conversionType == "binary" {
-        for r := range(userInput) {
+        for _, r := range(userInput) {
             if r != '0' && r != '1' {
                 invalid = true
                 err = errors.New("Invalid binary string")
