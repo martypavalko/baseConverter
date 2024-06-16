@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 
 	// "log"
 	"math"
@@ -43,8 +44,7 @@ func validateInput(userInput, conversionType string) (bool, error){
     return true, nil
 }
 
-// CURRENTLY RETURNING ERROR
-func binaryToDecimal(binaryValue string) float64 {
+func binaryToDecimal(binaryValue string) string {
     isValid, err := validateInput(binaryValue, "binary")
     if err != nil || !isValid {
         fmt.Println(err)
@@ -57,8 +57,12 @@ func binaryToDecimal(binaryValue string) float64 {
             sum += math.Pow(2, float64(size-exp-1))
         }
     }
-    return sum
+    return strconv.Itoa(int(sum))
 }
+
+// func decimalToBinary(decimalValue string) string {
+//     return "Binary!"
+// }
 
 func main() {
     fmt.Println(binaryToDecimal("010001"))
