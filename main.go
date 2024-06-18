@@ -3,9 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
-	"os"
-	"strconv"
 	"math"
+	"os"
+	"regexp"
+	"strconv"
 )
 
 /*
@@ -50,13 +51,35 @@ func validateInput(userInput, conversionType string) (bool, error) {
 }
 
 func betterValidation (userInput string) (string, error) {
-    // Binary return type: string
-    // Decimal return type: int/float
-    // Hexadecimal return type: string
-    // Base64 return type: string
+    // Return numeral system (base type) and errors
 
     // Take input, determine what base it is, validate the format is correct.
+    // Use Regex
     // If format is correct return, the original value and nil, if format is incorrect, return nil and the error 
+
+    // Determine what base it is
+    // Binary: input only contains 1's and 0's
+    binaryPattern, err := regexp.Compile("^[0-1]+$")
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+    if binaryPattern.Match([]byte(userInput)) {
+        return "binary", nil
+    }
+    // Hexadecimal: input only contains 0-9 and a-f
+    hexPattern, err := regexp.Compile("^[0-9a-fA-F]+$")
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+    if hexPattern.Match([]byte(userInput)) {
+        return "hexadecimal", nil
+    }
+    // Decimal: input only contains 0-9
+
+    // Base64 -> I have no fucking clue
+    return "shouldn't have hit this", nil
 }
 
 // TODO: Move all parts of input validation to the validateInput function and have it automatically detect what type was entered.
@@ -87,8 +110,13 @@ func decimalToBinary(decimalValue string) string {
 }
 
 func main() {
-    fmt.Println(binaryToDecimal("010001"))
-    fmt.Println(binaryToDecimal("110000"))
-    fmt.Println(binaryToDecimal("11100001"))
-    fmt.Println(binaryToDecimal("000000011111"))
+    // fmt.Println(binaryToDecimal("010001"))
+    // fmt.Println(binaryToDecimal("110000"))
+    // fmt.Println(binaryToDecimal("11100001"))
+    // fmt.Println(binaryToDecimal("000000011111"))
+    str, err := betterValidation("11111111")
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Println(str)
 }
