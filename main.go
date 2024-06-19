@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"regexp"
@@ -56,7 +57,7 @@ func betterValidation (userInput string) (string, error) {
         return "hexadecimal", nil
     }
     // TODO: Add base64 validation
-    return "shouldn't have hit this", nil
+    return "", errors.New("Not a valid format!")
 }
 
 func binaryToDecimal(binaryValue string) string {
@@ -75,9 +76,13 @@ func decimalToBinary(decimalValue string) string {
 }
 
 func main() {
-    str, err := betterValidation("11111111")
+    fmt.Println("Enter the number you want to convert")
+    var userInput string
+    fmt.Scanln(&userInput)
+    // fmt.Printf("This is my input: %s\n", userInput)
+    base, err := betterValidation(userInput)
     if err != nil {
         fmt.Println(err)
     }
-    fmt.Println(str)
+    fmt.Println(base)
 }
