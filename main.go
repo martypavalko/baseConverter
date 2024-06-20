@@ -60,10 +60,10 @@ func betterValidation (userInput string) (string, error) {
     return "", errors.New("Not a valid format!")
 }
 
-func binaryToDecimal(binaryValue string) string {
-    size := len(binaryValue)
+func binaryToDecimal(userInput string) string {
+    size := len(userInput)
     var sum float64
-    for exp, bit := range(binaryValue) {
+    for exp, bit := range(userInput) {
         if (bit != '0') {
             sum += math.Pow(2, float64(size-exp-1))
         }
@@ -71,18 +71,48 @@ func binaryToDecimal(binaryValue string) string {
     return strconv.Itoa(int(sum))
 }
 
-func decimalToBinary(decimalValue string) string {
-    return decimalValue
+func decimalToBinary(userInput string) (string, error) {
+    decimalValue, err := strconv.Atoi(userInput)
+    if err != nil {
+        return "", err
+    }
+    var binaryString string
+    for {
+        originalDecValue := decimalValue
+        decimalValue = decimalValue / 2
+        remainder := math.Mod(float64(originalDecValue), 2)
+        binaryString += strconv.Itoa(int(remainder))
+        if decimalValue == 0 {
+            break
+        }
+    }
+    binaryRunes := []rune(binaryString)
+    for i := 0; i < len(binaryString) / 2; i++ {
+        binaryRunes[i], binaryRunes[len(binaryString)-1-i] = binaryRunes[len(binaryString)-1-i], binaryRunes[i] 
+    }
+    return string(binaryRunes), nil
 }
 
 func main() {
     fmt.Println("Enter the number you want to convert")
     var userInput string
     fmt.Scanln(&userInput)
-    // fmt.Printf("This is my input: %s\n", userInput)
     base, err := betterValidation(userInput)
     if err != nil {
         fmt.Println(err)
     }
-    fmt.Println(base)
+    switch base {
+    case "decimal":
+        conversion, err := decimalToBinary(userInput)
+        if err != nil {
+            fmt.Println(err)
+        }
+        fmt.Println(conversion)
+    case "binary":
+        conversion := binaryToDecimal(userInput)
+        if err != nil {
+            fmt.Println(err)
+        }
+        fmt.Println(conversion)
+    }
 }
