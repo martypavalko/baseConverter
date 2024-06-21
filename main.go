@@ -26,6 +26,8 @@ Steps for Binary conversion:
 */
 
 func betterValidation (userInput string) (string, error) {
+    // BUG: This is not validating hex properly.  It needs to parse better
+
     // Return numeral system (base type) and errors
 
     // Take input, determine what base it is, validate the format is correct.
@@ -93,7 +95,39 @@ func decimalToBinary(userInput string) (string, error) {
     return string(binaryRunes), nil
 }
 
+func hexadecimalToDecimal (userInput string) (string, error) {
+    var hexBitsSeparated []float64
+    var sum float64 = 0
+    for _, r := range(userInput) {
+        // Below should ensure everything is converted to upper case
+        if int(r) > 70 {
+            r = rune(int(r) - 32)
+        }
+        switch r {
+        case 'A':
+        hexBitsSeparated = append(hexBitsSeparated, 10)
+        case 'B':
+        hexBitsSeparated = append(hexBitsSeparated, 11)
+        case 'C':
+        hexBitsSeparated = append(hexBitsSeparated, 12)
+        case 'D':
+        hexBitsSeparated = append(hexBitsSeparated, 13)
+        case 'E':
+        hexBitsSeparated = append(hexBitsSeparated, 14)
+        case 'F':
+        hexBitsSeparated = append(hexBitsSeparated, 15)
+        default:
+        hexBitsSeparated = append(hexBitsSeparated, float64(r - '0'))
+        }
+    }
+    for i, hexBits := range(hexBitsSeparated) {
+        sum += math.Pow(float64(hexBits), float64(len(hexBitsSeparated)-i-1))
+    }
+    return strconv.Itoa(int(sum)), nil    
+}
+
 func main() {
+    // fmt.Printf("This is what the hex letters look like with int casting:\n- A: %v\n-a: %v\n-F: %v\n-f: %v\n-r-'0': %v\n", int('A'), int('a'), int('F'), int('f'), int('9'-'0'))
     fmt.Println("Enter the number you want to convert")
     var userInput string
     fmt.Scanln(&userInput)
@@ -114,5 +148,12 @@ func main() {
             fmt.Println(err)
         }
         fmt.Println(conversion)
+    case "hexadecimal":
+        conversion, err := decimalToBinary(userInput)
+        if err != nil {
+            fmt.Println(err)
+        }
+        fmt.Println(conversion)
     }
+
 }
