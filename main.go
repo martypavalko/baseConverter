@@ -104,37 +104,45 @@ func hexadecimalToDecimal (userInput string) (string, error) {
             r = rune(int(r) - 32)
         }
         switch r {
-        case 'A':
+        case 65:
         hexBitsSeparated = append(hexBitsSeparated, 10)
-        case 'B':
+        case 66:
         hexBitsSeparated = append(hexBitsSeparated, 11)
-        case 'C':
+        case 67:
         hexBitsSeparated = append(hexBitsSeparated, 12)
-        case 'D':
+        case 68:
         hexBitsSeparated = append(hexBitsSeparated, 13)
-        case 'E':
+        case 69:
         hexBitsSeparated = append(hexBitsSeparated, 14)
-        case 'F':
+        case 70:
         hexBitsSeparated = append(hexBitsSeparated, 15)
         default:
         hexBitsSeparated = append(hexBitsSeparated, float64(r - '0'))
         }
     }
-    for i, hexBits := range(hexBitsSeparated) {
-        sum += math.Pow(float64(hexBits), float64(len(hexBitsSeparated)-i-1))
+    for i, hexBits := range hexBitsSeparated {
+        fmt.Printf("\nindex: %v, bit: %.0f\n", i, hexBits)
+        fmt.Printf("Exp: %v\n", len(hexBitsSeparated)-i-1)
+        sum += hexBits * math.Pow(16, float64(len(hexBitsSeparated)-i-1))
+        fmt.Printf("Sum: %v\n", sum)
     }
-    return strconv.Itoa(int(sum)), nil    
+    return strconv.Itoa(int(sum)), nil
 }
 
 func main() {
     // fmt.Printf("This is what the hex letters look like with int casting:\n- A: %v\n-a: %v\n-F: %v\n-f: %v\n-r-'0': %v\n", int('A'), int('a'), int('F'), int('f'), int('9'-'0'))
+    // TODO: Ask the user what type of conversion to perform
+    // Because the validation cannot tell the difference between dec and hex when dealing with only 0-9
+    // Maybe accept them as cmdline args when calling the program
+
     fmt.Println("Enter the number you want to convert")
     var userInput string
     fmt.Scanln(&userInput)
-    base, err := betterValidation(userInput)
+    _, err := betterValidation(userInput)
     if err != nil {
         fmt.Println(err)
     }
+    // fmt.Println(base)
     switch base {
     case "decimal":
         conversion, err := decimalToBinary(userInput)
@@ -149,7 +157,7 @@ func main() {
         }
         fmt.Println(conversion)
     case "hexadecimal":
-        conversion, err := decimalToBinary(userInput)
+        conversion, err := hexadecimalToDecimal(userInput)
         if err != nil {
             fmt.Println(err)
         }
